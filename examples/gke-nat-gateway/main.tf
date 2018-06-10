@@ -34,6 +34,15 @@ variable network {
   default = "default"
 }
 
+variable subnetwork {
+  default = "default"
+}
+
+variable machine_type {
+  description = "The machine type for the NAT gateway instance"
+  default     = "f1-micro"
+}
+
 provider google {
   region = "${var.region}"
 }
@@ -45,7 +54,8 @@ module "nat" {
   zone       = "${var.zone}"
   tags       = ["${var.gke_node_tag}"]
   network    = "${var.network}"
-  subnetwork = "${var.network}"
+  subnetwork = "${var.subnetwork}"
+  machine_type = "${var.machine_type}"
 }
 
 // Route so that traffic to the master goes through the default gateway.
