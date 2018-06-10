@@ -31,13 +31,16 @@ Create a `terraform.tfvars` file with the the region, zone, master IP, and the n
 
 ```
 NODE_TAG=$(gcloud compute instance-templates describe $(gcloud compute instance-templates list --filter=name~gke-${CLUSTER_NAME} --limit=1 --uri) --format='get(properties.tags.items[0])')
-MASTER_IP=$(gcloud compute firewall-rules describe ${NODE_TAG/-node/-ssh} --format='value(sourceRanges)')
+MASTER_IP=$(gcloud container clusters describe ${CLUSTER_NAME} --zone ${ZONE} --format='get(endpoint)')
+
 
 cat > terraform.tfvars <<EOF
 region = "${REGION}"
 zone   = "${ZONE}"
 gke_master_ip = "${MASTER_IP}"
 gke_node_tag = "${NODE_TAG}"
+network = "wordpress-dev"
+subnetwork = "wordpress-dev-default"
 EOF
 ```
 
